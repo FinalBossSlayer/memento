@@ -1,9 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import shuffle from './utilities/shuffle';
 import Card from './components/Card';
 
 function App() {
   const [cards, setCards] = useState(shuffle);
+  const [pickOne, setPickOne] = useState(null);
+  const [pickTwo, setPickTwo] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+  const [wins, setWins] = useState(0);
+
+  const handleClick = (card) => {
+    if (!disabled) {
+      pickOne ? setPickTwo(card) : setPickOne(card);
+    }
+  };
+
+  const handleTurn = () => {
+    setPickOne(null);
+    setPickTwo(null);
+    setDisabled(false);
+  };
 
   return (
     <>
