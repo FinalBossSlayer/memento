@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import shuffle from './utilities/shuffle';
 import Card from './components/Card';
 import Header from "./components/Header";
+import useAppBadge from "./hooks/useAppBadge";
 
 function App() {
   const [cards, setCards] = useState(shuffle);
@@ -9,6 +10,7 @@ function App() {
   const [pickTwo, setPickTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [wins, setWins] = useState(0);
+  const [setBadge, clearBadge] = useAppBadge();
 
   const handleClick = (card) => {
     if (!disabled) {
@@ -23,6 +25,7 @@ function App() {
   };
 
   const handleNewGame = () => {
+    clearBadge();
     setWins(0);
     handleTurn();
     setCards(shuffle);
@@ -54,18 +57,19 @@ function App() {
     return () => {
       clearTimeout(pickTimer);
     };
-  }, [cards, pickOne, pickTwo]);
+  }, [cards, pickOne,setBadge, pickTwo, wins]);
 
   useEffect(() => {
-    const checkWins = cards.filter((card) => !card.matched);
+    const checkWin = cards.filter((card) => !card.matched);
 
-    if (cards.langht && checkWins.langht < 1) {
+    if (cards.length && checkWin.length < 1) {
       console.log("You win");
       setWins(wins + 1);
       handleTurn();
+      setBadge();
       setCards(shuffle);
     }
-  }, [cards, wins]);
+  }, [cards,setBadge, wins]);
 
   return (
     <>
